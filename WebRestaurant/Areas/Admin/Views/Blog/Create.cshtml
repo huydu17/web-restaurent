@@ -1,0 +1,82 @@
+﻿@model Blog
+
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Danh mục</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Dashboard</a>
+                <a class="breadcrumb-item" asp-action="Index" asp-controller="Blog" asp-area="Admin">Quản lý Blog</a>
+                <span class="breadcrumb-item active">Thêm Blog</span>
+            </nav>
+        </div>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+        <div class="tab-content m-t-15">
+            <div class="tab-pane fade show active" id="product-edit-basic">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="font-weight-semibold" asp-for="Title">Tiêu đề</label>
+                            <input type="text" class="form-control" asp-for="Title" placeholder="Tiêu đề" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-semibold" asp-for="Author">Tác giả</label>
+                            <input type="text" class="form-control" asp-for="Author" placeholder="Tác giả" />
+                            <span asp-validation-for="Author" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-semibold" asp-for="ShortDescription">Mô tả ngắn</label>
+                            <input type="text" class="form-control" asp-for="ShortDescription" placeholder="Mô tả ngắn" />
+                            <span asp-validation-for="ShortDescription" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-semibold" asp-for="Status">Trạng thái</label> <br />
+                            <div class="row col-md-8">
+                                <label class="col-md-3">
+                                    <input asp-for="Status" value="true" type="radio" /> @SD.Display
+                                </label>
+                                <label class="col-md-4">
+                                    <input asp-for="Status" value="false" type="radio" /> @SD.NotDisplayed
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-semibold" asp-for="ImageUrl">Hình ảnh</label>
+                            <input type="file" name="file" class="form-control" placeholder="Mô tả" />
+                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-semibold" asp-for="Description">Nội dung</label>
+                            <textarea type="text" class="form-control" asp-for="Description" placeholder="Nội dung"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="anticon anticon-save"></i>
+                                <span>Xác nhận</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <!-- Place the first <script> tag in your HTML's <head> -->
+    <script src="https://cdn.tiny.cloud/1/13uc0fv8mr1svucgzy67yw3f984ys2owii8ka24ewek8i2tx/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
+    </script>
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

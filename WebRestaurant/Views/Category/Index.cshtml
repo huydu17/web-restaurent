@@ -1,0 +1,177 @@
+﻿@using WebRestaurant.Utility.Helpers;
+@model ProductCategoryVM
+
+
+<span class="text-danger">@ViewBag.CategoryId</span>
+<style>
+	/* Tùy chỉnh select */
+	#mySelect {
+		padding: 8px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		font-size: 14px;
+		color: #333;
+		background-color: #fff;
+		width: 200px;
+	}
+
+	/* Tùy chỉnh option */
+	#mySelect option {
+		font-size: 14px;
+		color: #333;
+		background-color: #fff;
+	}
+
+	.product_tab_button a {
+		font-weight: bold;
+		margin-right: 15px;
+	}
+</style>
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<p class="bread"><span><a asp-action="Index" asp-controller="Home">Trang chủ</a></span>/<span><a asp-action="Index" asp-controller="Product">Thực đơn</a></span> / <span>@ViewBag.Category</span></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="product_header">
+	<div class="section_title text-center">
+		<div>
+			<img src="~/client-site/images/logo.png" />
+		</div>
+	</div>
+	<div class="product_tab_button">
+		<ul class="nav justify-content-center">
+			<a asp-action="Index" asp-controller="Product">Tất cả</a>
+			@foreach (var item in Model.Categories)
+			{
+				<a asp-action="Index" asp-controller="Category" asp-route-categoryId="@item.Id">@item.Name</a>
+			}
+		</ul>
+	</div>
+</div>
+<div class="colorlib-product">
+	<div class="container">
+		<div class="mb-3">
+			<strong>Sắp xếp:</strong>
+			<select id="mySelect">
+				<option value="all">Mặc định</option>
+				<option value="lowtohigh">Từ thấp đến cao</option>
+				<option value="hightolow">Từ cao đến thấp</option>
+				<option value="az">Từ A-Z</option>
+			</select>
+			<input id="cateId" value="@ViewBag.CategoryId" hidden />
+		</div>
+		<div class="col-lg-12">
+			<div id="productContainer">
+				<div class="row row-pb-md">
+
+					@foreach (var item in Model.Products)
+					{
+				
+						<div class="col-lg-4 mb-4 text-center">
+							<div class="product-entry border">
+								@if (item.ProductImages != null && item.ProductImages.Count() > 0)
+								{
+									<a asp-action="Details" asp-controller="Product" asp-route-productId="@item.Id"><img src="@item.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" style="height:230px;" /></a>
+								}
+								else
+								{
+									<img src="https://placehold.co/500x600/png" class="card-img-top rounded" />
+								}
+								<div class="desc">
+									<h2>@item.Name</h2>
+									<span class="price">@item.Price.ToVnd()</span>
+									<span class="price"><a asp-action="Details" asp-controller="Product" asp-route-productId="@item.Id"><i class="bi bi-eye"></i></a></span>
+								</div>
+							</div> 
+						</div>
+					}
+				</div>
+				<div class="row">
+					<div class="col-md-12 text-center">
+						<div class="block-27">
+							<ul>
+								@for (int i = 1; i <= Model.PageInfo.TotalPages; i++)
+								{
+									<li><a href="/Category?categoryId=@ViewBag.CategoryId&productpage=@i">@i</a></li>
+								}
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@section Scripts{
+	<script>
+		var categoryId;
+		document.getElementById("mySelect").addEventListener("change", function () {
+			var selectedOption = this.value;
+			// Thực hiện hành động dựa trên selectedOption
+			console.log("Option được chọn: " + selectedOption);
+			categoryId = $("#cateId").val();	
+			$.ajax({
+				url: "/Category/GetFilters",
+				type: 'post',
+				data: {
+					sort: selectedOption,
+					categoryId: categoryId
+				},
+				success: function (data) {
+					$('#productContainer').html(data);
+					var totalItem = document.querySelectorAll(".col-lg-4");
+					var pageSize = @SD.PageSize;
+					var totalPage = Math.ceil(totalItem.length / pageSize);
+					const div1 = document.createElement("div");
+					div1.classList.add("row");
+					const div2 = document.createElement("div");
+					div2.classList.add("col-md-12", "text-center");
+					const div3 = document.createElement("div");
+					div3.classList.add("block-27");
+					const ul = document.createElement("ul");
+					for (i = 1; i <= totalPage; i++) {
+						var li = document.createElement("li");
+						var a = document.createElement("a");
+						a.innerHTML = i;
+						a.addEventListener('click', handlePageClick);
+						a.href = "/Category?categoryId=" + categoryId + "&productpage=" + i;
+						li.appendChild(a);
+						ul.appendChild(li);
+					}
+					div3.appendChild(ul);
+					div2.appendChild(div3);
+					div1.appendChild(div2);
+					document.getElementById("productContainer").appendChild(div1);
+					ShowPage(categoryId, 1);
+				},
+				error: function () {
+					console.log("Lỗi");
+				}
+			});
+		});
+		function handlePageClick(event) {
+			event.preventDefault();
+			var pageNumber = parseInt(event.target.textContent);
+			event.target.style.cursor = 'pointer';
+			ShowPage(categoryId,pageNumber);
+		}
+		function ShowPage(categoryId, pageNumber) {
+			var totalItems = document.querySelectorAll(".col-lg-4");
+			var pageSize = @SD.PageSize;
+			var startIndex = (pageNumber - 1) * pageSize;
+			var endIndex = startIndex + pageSize;
+			for (i = 0; i < totalItems.length; i++) {
+				if (i >= startIndex && i < endIndex) {
+					totalItems[i].style.display = "block";
+				} else {
+					totalItems[i].style.display = "none";
+				}
+			}
+		}
+	</script>
+}

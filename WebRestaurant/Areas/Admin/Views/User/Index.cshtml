@@ -1,0 +1,117 @@
+﻿<!-- Content Wrapper START -->
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Người dùng</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a asp-action="Index" asp-controller="Dashboard" asp-area="Admin" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Dashboard</a>
+                <span class="breadcrumb-item active"> Quản lý người dùng</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row m-b-30">
+                <div class="col-lg-8">
+                    <div class="d-md-flex">
+                        <div class="m-b-10 m-r-15">
+                        </div>
+                        <div class="m-b-10">
+                        </div>
+                    </div>
+                </div>
+      
+            </div>
+            <div class="table-responsive">
+                <table id="tblData" class="table table-hover e-commerce-table">
+                    <thead>
+                        <tr>
+                            <th>Họ</th>
+                            <th>Tên</th>
+                            <th>Tài khoản</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Phân quyền</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        var datatbl;
+        $(document).ready(function () {
+            loadDataTable();
+        });
+        function loadDataTable() {
+            datatbl = $('#tblData').DataTable({
+                'ordering': false,
+                'info': false,
+                'autoWidth': false,
+                'lengChange': false,
+                'bordering': false,
+                "ajax": { url: '/admin/user/getall' },
+                "columns": [
+                    { data: 'firstName', "width": "12%" },
+                    { data: 'lastName', "width": "10%" },
+                    { data: 'userName', "width": "10%" },
+                    { data: 'email', "width": "15%" },
+                    { data: 'phoneNumber', "width": "12%" },
+                    { data: 'role', "width": "10%" },
+                    {
+                        data: { id: "id", lockoutEnd: "lockoutEnd" },
+                        "render": function (data) {
+                            today = new Date().getTime();
+                            lockout = new Date(data.lockoutEnd).getTime();
+                            if (lockout > today) {
+                                return `
+                                <div class="text-center">
+                                        <a onclick=LockUnlock('${data.id}') class="btn btn-danger m-r-5 text-white" style="cursor:pointer; width:120px;">
+                                            <i class="bi bi-lock-fill"></i> Đã khoá
+                                        </a>
+                                                <a href="/admin/user/RoleManagement?userId=${data.id}" class="btn btn-info m-r-5" style="cursor:pointer; width:130px;">
+                                             <i class="bi bi-pencil-square"></i> Cập nhật
+                                        </a>
+                                </div>
+                            `
+                            } else {
+                                return `
+                                <div class="text-center">
+                                                        <a onclick=LockUnlock('${data.id}') class="btn btn-success m-r-5 text-white" style="cursor:pointer; width:120px;">
+                                            <i class="bi bi-unlock-fill"></i>  Mở khoá
+                                        </a>
+                                                <a href="/admin/user/RoleManagement?userId=${data.id}" class="btn btn-info m-r-5" style="cursor:pointer; width:130px;">
+                                             <i class="bi bi-pencil-square"></i> Cập nhật
+                                        </a>
+                                </div>
+                            `
+                            }
+                        },
+                        "width": "25%"
+                    },
+                ]
+            });
+        }
+        function LockUnlock(id) {
+            $.ajax({
+                type: "POST",
+                url: '/Admin/User/LockUnlock',
+                data: JSON.stringify(id),
+                contentType: "application/json",
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        datatbl.ajax.reload();
+                    }
+                }
+            });
+        }
+    </script>
+}

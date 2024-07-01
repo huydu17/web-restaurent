@@ -1,0 +1,181 @@
+﻿
+@{
+    var status = Context.Request.Query["status"];
+    var pending = "text-primary";
+    var approved = "text-primary";
+    var intransit = "text-primary";
+    var shipped = "text-primary";
+    var cancelled = "text-primary";
+    var all = "text-primary";
+
+    switch (status)
+    {
+        case "pending":
+            pending = "active text-white bg-primary";
+            break;
+        case "approved":
+            approved = "active text-white bg-primary";
+            break;
+        case "intransit":
+            intransit = "active text-white bg-primary";
+            break;
+        case "shipped":
+            shipped = "active text-white bg-primary";
+            break;
+        case "cancelled":
+            cancelled = "active text-white bg-primary";
+            break;
+        default:
+            all = "active text-white bg-primary";
+            break;
+
+    }
+}
+
+<!-- Content Wrapper START -->
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Đơn hàng</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a asp-action="Index" asp-controller="Dashboard" asp-area="Admin" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Dashboard</a>
+                <span class="breadcrumb-item active"> Quản lý đơn hàng</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row m-b-30">
+                <div class="col-lg-4">
+                    <div class="d-md-flex">
+                        <div class="m-b-10 m-r-15">
+                        </div>
+                        <div class="m-b-10">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="d-flex justify-content-between pb-5 pt-2">
+                        <ul class="list-group list-group-horizontal-sm">
+                            <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="pending">
+                            <li class="list-group-item @pending">Chờ xác nhận</li>
+                            </a>
+                            <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="approved">
+                            <li class="list-group-item @approved">Đã xác nhận</li>
+                            </a>
+                            <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="intransit">
+                            <li class="list-group-item @intransit">Đang vận chuyển</li>
+                            </a>
+                            <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="shipped">
+                            <li class="list-group-item @shipped">Đã giao</li>
+                            </a>
+                            <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="cancelled">
+                            <li class="list-group-item @cancelled">Đã huỷ</li>
+                            </a>
+                            <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="all">
+                            <li class="list-group-item @all">Tất cả</li>
+                            </a>
+                        </ul>               
+                    </div>
+                </div>
+            <div class="table-responsive">
+                <table id="tblData" class="table table-hover e-commerce-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Số điện thoại</th>
+                            <th>Email</th>
+                            <th>Ngày đặt</th>
+                            <th>Trạng thái</th>
+                            <th>Tổng</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var datatbl;
+        $(document).ready(function () {
+            var url = window.location.search;
+            if (url.includes("pending")) {
+                loadDataTable("pending");
+            }
+            else {
+                if (url.includes("approved")) {
+                    loadDataTable("approved");
+                }
+                else {
+                    if (url.includes("intransit")) {
+                        loadDataTable("intransit");
+                    }
+                    else {
+                        if (url.includes("shipped")) {
+                            loadDataTable("shipped");
+                        }
+                        else{
+                            if (url.includes("cancelled")) {
+                                loadDataTable("cancelled");
+                            }
+                            else {
+                                loadDataTable("all");
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        Number.prototype.ToVnd = function () {
+            return this.toLocaleString() + ' vnđ';
+        };
+        function loadDataTable(status) {
+                datatbl = $('#tblData').DataTable({
+                'order':false,
+                'info': false,
+                'autoWidth': false,
+                'lengChange': false,
+                'bordering': false,
+                "ajax": { url: '/admin/order/getall?status=' + status },
+                "columns": [
+                    { data: 'name', "width": "18%" },
+                    { data: 'phone', "width": "12%" },
+                    { data: 'applicationUser.email', "width": "20%" },
+                    {
+                        data: 'orderDate',
+                        "render": function (data) {
+                            var date = new Date(data);
+                            return date.toLocaleString()
+                        },
+                        "width": "15%"
+                    },
+                    { data: 'orderStatus', "width": "15%" },
+                    {
+                        data: 'orderTotal',
+                        render: function (data) {
+                            var giaTri = parseFloat(data);
+                            return giaTri.ToVnd();
+                        },
+                        width: "15%"
+                    },
+                    {
+                        data: 'id',
+                        "render": function (data) {
+                            return `<div class="w-75 btn-group" role="group">
+                                            <a href="/admin/order/details?orderId=${data}" class="btn btn-primary btn-tone m-r-5"> <i class="bi bi-pencil-square"></i></a>
+                            </div>`
+                        },
+                        "width": "10%"
+                    }
+                ]
+            });
+        }
+
+    </script>
+}

@@ -1,0 +1,362 @@
+﻿@using WebRestaurant.Utility.Helpers;
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@model ProductDetailVM
+<style>
+    .addtocart-content {
+        display: flex;
+        align-items: center;
+    }
+
+    .comment {
+        font-size: 30px;
+        font-weight: 500;
+    }
+</style>
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p class="bread"><span><a asp-action="Index" asp-controller="Home">Trang chủ</a></span>/<span><a asp-action="Index" asp-controller="Product">Sản phẩm</a></span> / <span>Chi tiết sản phẩm</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="colorlib-product">
+    <div class="container">
+        <div class="row row-pb-lg product-detail-wrap">
+            <div class="col-sm-5">
+                @if (Model.ShoppingCart.Product.ProductImages != null && Model.ShoppingCart.Product.ProductImages.Count > 0)
+                {
+                    <div class="galleryContainer">
+                        <div class="slideShowContainer">
+                            <div id="playPause" onclick="playPauseSlides()"></div>
+                            <div onclick="plusSlides(-1)" class="nextPrevBtn leftArrow"><span class="arrow arrowLeft"></span></div>
+                            <div onclick="plusSlides(1)" class="nextPrevBtn rightArrow"><span class="arrow arrowRight"></span></div>
+                            <div class="captionTextHolder"><p class="captionText slideTextFromTop"></p></div>
+                            @foreach (var item in Model.ShoppingCart.Product.ProductImages)
+                            {
+                                <div class="imageHolder">
+                                    <img src="@item.ImageUrl" width="250px" height="350px">1366X768
+                                    <p class="captionText"></p>
+                                </div>
+                            }
+                        </div>
+                        <div id="dotsContainer"></div>
+                    </div>
+
+                }
+                else
+                {
+                    <img src="https://placehold.co/200x300/png" class="card-img-top rounded" />
+                }
+            </div>
+            <div class="col-sm-5">
+                <div class="product-desc">
+                    <h3>@Model.ShoppingCart.Product.Name</h3>
+                    <p class="price">
+                        <span>@Model.ShoppingCart.Product.Price.ToVnd()</span>
+                    </p>
+                    <div class="size-wrap">
+                        <div class="block-26 mb-2">
+                            <h4 style="display: inline-block;">Danh mục: </h4>
+                            <p style="display: inline-block; margin-left: 10px;">@Model.ShoppingCart.Product.Category.Name</p>
+                        </div>
+                    </div>
+                    <div class="size-wrap">
+                        <div class="block-26 mb-2">
+                            <h4 style="display: inline-block;">Trạng thái: </h4>
+                            <p style="display: inline-block; margin-left: 10px;">
+                                @if (Model.ShoppingCart.Product.Status)
+                                {
+                                    <span style="color:green">@SD.InStock</span>
+
+                                }
+                                else
+                                {
+                                    <span style="color:red">@SD.OutOfStock</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                    <div class="size-wrap">
+                        <div class="block-26 mb-2">
+                            <h4 style="display: inline-block;">Mô tả: </h4>
+                            <p style="display: inline-block; margin-left: 10px;">@Model.ShoppingCart.Product.ShortDescription</p>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-4">
+                        <span class="input-group-btn">
+                            <button type="button" class="quantity-left-minus btn" data-type="minus" data-field="">
+                                <i class="icon-minus2"></i>
+                            </button>
+                        </span>
+                        <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100">
+                        <span class="input-group-btn ml-1">
+                            <button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
+                                <i class="icon-plus2"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="desc">
+                        <div class="row">
+                            <p class="addtocart">
+                                <button type="button" class="btn btn-danger btn-addtocart ajax-add-to-wish" data-id="@Model.ShoppingCart.Product.Id">
+                                    <span class="addtocart-content"><i class="bi bi-heart-fill"></i>Yêu thích</span>
+                                </button>
+                            </p>
+                            <p class="addtocart">
+                                <button type="button" class="btn btn-primary btn-addtocart ajax-add-to-cart" data-id="@Model.ShoppingCart.Product.Id">
+                                    <span class="addtocart-content"><i class="bi bi-bag-check-fill"></i>Thêm vào giỏ hàng</span>
+                                </button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-md-12 pills">
+                        <div class="bd-example bd-example-tabs">
+
+                            <button class="btn btn-primary btn-addtocart" data-id="@Model.ShoppingCart.Product.Id">
+                                <span class="addtocart-content">Mô tả chi tiết</span>
+                            </button>
+                            <div class="row tab-pane border mt-3">                     
+                                    <p>@Html.Raw(Model.ShoppingCart.Product.Description)</p>                    
+                            </div>
+                            <button class="btn btn-primary btn-addtocart mt-3" data-id="@Model.ShoppingCart.Product.Id">
+                                <span class="addtocart-content">Bình luận</span>
+                            </button>
+                            <div class="row tab-pane border mt-3">
+                                <div class="col-md-8">
+                                    @if (Model.Comments.Count > 0)
+                                    {               
+                                       
+                                        <h3 class="head">@Model.Comments.Count Reviews</h3>
+                                        @foreach (var item in Model.Comments.OrderByDescending(x => x.TimeStamp))
+                                        {
+
+                                            <div class="review">
+                                                <div class="user-img" style="background-image: url(/client-site/images/avatar.png)"></div>
+                                                <div class="desc">
+                                                    <h4>
+                                                        <span class="text-left">@item.Name</span>
+                                                        <span class="text-right">@item.TimeStamp</span>
+                                                    </h4>
+                                                    <p class="star">
+                                                        <span>
+                                                            @for(int i=1;i <= item.Rating ;i++)
+                                                            {
+                                                                <i class="text-warning bi bi-star-fill"></i>
+                                                            }
+                                                            @for (int i = 1; i <= (5 - @item.Rating); i++)
+                                                            {
+                                                                <i class="text-warning bi bi-star"></i>
+                                                            }
+                                                        </span>                      
+                                                    </p>
+                                                    <p>@item.Text</p>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p>Chưa có bình luận nào</p>
+                                    }
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="rating-wrap">
+                                        <h3 class="head">Bình luận</h3>
+                                    </div>
+                                    <span class="text-warning">
+                                        <i class="bi bi-star-fill" data-value="1"></i>
+                                        <i class="ratingStar bi bi-star" data-value="2"></i>
+                                        <i class="ratingStar bi bi-star" data-value="3"></i>
+                                        <i class="ratingStar bi bi-star" data-value="4"></i>
+                                        <i class="ratingStar bi bi-star" data-value="5"></i>
+                                    </span>     
+                                    <div class="form-group mt-2">
+                                        <textarea id="message" cols="30" rows="4" class="form-control" placeholder="Viết bình luận"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-primary add-comment" data-id="@Model.ShoppingCart.ProductId">Bình luận</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+    </div>
+</div>
+
+@section Scripts{
+    <!--Comment-->
+    <script>
+        var starvalue;
+        $(document).ready(function () {
+            $('.ratingStar').hover(function () {
+                $('.ratingStar').addClass('bi bi-star').removeClass('bi bi-star-fill');
+                $(this).addClass('bi bi-star-fill').removeClass('bi bi-star');
+                $(this).prevAll('.ratingStar').addClass('bi bi-star-fill').removeClass('bi bi-star');
+            });
+            $('.ratingStar').click(function () {
+                starvalue = $(this).attr("data-value");
+            });
+            $('.add-comment').click(function () {
+                const text = $('#message').val();
+                const productId = $(this).data('id');
+                if (!isUserAuthenticated()) {
+                    showLoginRequiredError();
+                    return;
+                };
+                $.ajax({
+                    url: "/Product/AddComment",
+                    type: 'post',
+                    data: {
+                        productId: productId,
+                        text: text,
+                        rating: starvalue
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        window.location.reload();
+                    },
+                    error: function () {
+
+                    }
+                });
+                function isUserAuthenticated() {
+                    return @User.Identity.IsAuthenticated.ToString().ToLower();
+                };
+                function showLoginRequiredError() {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Bình luận thất bại",
+                        text: "Vui lòng đăng nhập!",
+                    }).then(function () {
+                        window.location.href = "/Account/Login";
+                    });
+                };
+            });
+        });
+    </script>
+    <!--Plus_Minus-->
+    <script>
+        $(document).ready(function () {
+            var quantitiy = 0;
+            $('.quantity-right-plus').click(function (e) {
+                e.preventDefault();
+                var quantity = parseInt($('#quantity').val());
+                $('#quantity').val(quantity + 1);
+            });
+            $('.quantity-left-minus').click(function (e) {
+                // Stop acting like a button
+                e.preventDefault();
+                // Get the field name
+                var quantity = parseInt($('#quantity').val());
+                // If is not undefined
+                // Increment
+                if (quantity > 0) {
+                    $('#quantity').val(quantity - 1);
+                }
+            });
+        });
+    </script>
+    <!--AddToCart-->
+    <script>
+        $(document).ready(function () {
+            $('.ajax-add-to-cart').click(function () {
+                const count = $("#quantity").val();
+                const productId = $(this).data("id");
+                if (!isUserAuthenticated()) {
+                    showLoginRequiredError();
+                    return;
+                };
+                $.ajax({
+                    url: "/Product/AddToCart",
+                    type: 'post',
+                    data: {
+                        productId: productId,
+                        quantity: count,
+                    },
+                    success: function (data) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Thêm vào giỏ hàng thành công!",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function () {
+                            window.location.reload();
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Thêm vào giỏ hàng thất bại",
+                            text: "Vui lòng thử lại!",
+                        });      
+                    }
+                });
+
+                function isUserAuthenticated() {
+                    return @User.Identity.IsAuthenticated.ToString().ToLower();
+                };
+                function showLoginRequiredError() {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Thêm vào giỏ hàng thất bại",
+                        text: "Vui lòng đăng nhập!",
+                    }).then(function () {
+                        window.location.href = "/Account/Login";
+                    });
+                };
+            });
+        });
+    </script>
+    <!--AddToWish-->
+    <script>
+        $(document).ready(function () {
+            $('.ajax-add-to-wish').click(function () {
+                const count = $("#quantity").val();
+                const productId = $(this).data("id");
+                $.ajax({
+                    url: "/Product/AddToWish",
+                    type: 'post',
+                    data: {
+                        productId: productId,
+                        quantity: count,
+                    },
+                    success: function (data) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Đã yêu thích!",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function () {
+                            window.location.reload();
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Thêm thất bại",
+                            text: "Vui lòng thử lại!",
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

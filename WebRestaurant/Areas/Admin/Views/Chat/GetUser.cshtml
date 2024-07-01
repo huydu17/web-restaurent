@@ -1,0 +1,195 @@
+﻿@model Conversation
+<style>
+    .config {
+        color: red;
+        text-align: center;
+        padding-top: 30px;
+        font-size: larger;
+        font-weight: bold;
+    }
+</style>
+<div class="app">
+    <div class="layout">
+        <!-- Side Nav END -->
+        <!-- Page Container START -->
+        <!-- Content Wrapper START -->
+        <div class="main-content">
+            <div class="container-fluid p-h-0">
+                <div class="chat chat-app row">
+                    <div class="chat-list">
+                        <div class="chat-user-tool">
+                            <div class="config">Danh sách</div>
+                        </div>
+                        <div class="chat-user-list">
+                            @await Component.InvokeAsync("GetConversation")
+                        </div>
+                    </div>
+                    <div class="chat-content">
+                        <div class="conversation">
+                            <div class="conversation-wrapper">
+                                <div class="conversation-header justify-content-between">
+                                    <div class="media align-items-center">
+                                        <a href="javascript:void(0);" class="chat-close m-r-20 d-md-none d-block text-dark font-size-18 m-t-5">
+                                            <i class="anticon anticon-left-circle"></i>
+                                        </a>
+                                        <div class="avatar avatar-image">
+                                            <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
+                                        </div>
+                                        <div class="p-l-15">
+                                            <h6 class="m-b-0">@ViewBag.FullName</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="conversation-body" id="message-history">
+                                    @foreach (var item in Model.Messages)
+                                    {
+                                        if (item.SenderId == @ViewBag.SenderId)
+                                        {
+                                            <div class="msg msg-sent">
+                                                <div class="bubble">
+                                                    <div class="bubble-wrapper">
+                                                        <span>@item.Content</span>
+                                                    </div>
+                                                    <span><small>@item.Timestamp</small></span>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="msg msg-recipient">
+                                                <div class="m-r-10">
+                                                    <div class="avatar avatar-image">
+                                                        <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
+                                                    </div>
+                                                </div>
+                                                <div class="bubble">
+                                                    <div class="bubble-wrapper">                                          
+                                                        <span>@item.Content</span>
+                                                    </div>
+                                                    <span><small>@item.Timestamp</small></span>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <form onsubmit="sendMessage(event)" asp-action="SendMessage" asp-controller="Chat" asp-area="Admin">
+                                    <div class="conversation-footer">
+                                        <input type="hidden" name="conversationId" value="@Model.Id" />
+                                        <input class="chat-input" id="message-input" type="text" name="content" placeholder="Nhập tin nhắn">
+                                        <ul class="list-inline d-flex align-items-center m-b-0">
+                                            <li class="list-inline-item m-r-15">
+                                                <a class="text-gray font-size-20" href="javascript:void(0);" data-toggle="tooltip" title="Emoji">
+                                                    <i class="anticon anticon-smile"></i>
+                                                </a>
+                                            </li>
+                                            <li class="list-inline-item m-r-15">
+                                                <a class="text-gray font-size-20" href="javascript:void(0);" data-toggle="tooltip" title="Attachment">
+                                                    <i class="anticon anticon-paper-clip"></i>
+                                                </a>
+                                            </li>
+                                            <li class="list-inline-item">
+                                                <button class="d-none d-md-block btn btn-primary" type="submit">
+                                                    <span class="m-r-10">Gửi</span>
+                                                    <i class="far fa-paper-plane"></i>
+                                                </button>
+                                                <a href="javascript:void(0);" class="text-gray font-size-20 d-md-none d-block">
+                                                    <i class="far fa-paper-plane"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+    <script>
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+        function scrollToBottom() {
+            var messageHistory = document.getElementById('message-history');
+            messageHistory.scrollTop = messageHistory.scrollHeight - messageHistory.clientHeight;
+        }
+        window.addEventListener('load', scrollToBottom);
+
+        connection.on("ConversationUpdated", function (data) {
+            console.log(data)
+        })
+        connection.on("ReceiveMessage", function (data) {
+            console.log(data);
+            var conversationBody = document.querySelector('.conversation-body');
+            var messageContainer = document.createElement('div');
+            if (data.senderId == '@ViewBag.SenderId') {
+                messageContainer.classList.add('msg', 'msg-sent');
+            } else {
+                messageContainer.classList.add('msg', 'msg-recipient');
+
+                var mR10 = document.createElement('div');
+                mR10.classList.add('m-r-10');
+
+                var avatarImage = document.createElement('div');
+                avatarImage.classList.add('avatar', 'avatar-image');
+
+                var img = document.createElement('img');
+                img.src = 'https://ptetutorials.com/images/user-profile.png';
+                img.alt = 'sunil';
+
+                avatarImage.appendChild(img);
+                mR10.appendChild(avatarImage);
+                messageContainer.appendChild(mR10);
+            }
+
+            var bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+
+            var bubbleWrapper = document.createElement('div');
+            bubbleWrapper.classList.add('bubble-wrapper');
+
+            var content = document.createElement('span');
+            content.textContent = data.content;
+
+            var timestamp = document.createElement('span');
+            timestamp.innerHTML = '<small>' + data.timestamp + '</small>';
+
+            bubbleWrapper.appendChild(content);
+            bubble.appendChild(bubbleWrapper);
+            bubble.appendChild(timestamp);
+            messageContainer.appendChild(bubble);
+
+            conversationBody.appendChild(messageContainer);
+
+            scrollToBottom()
+        });
+        connection.start()
+            .then(() => {
+                connection.invoke('joinRoom', '@Model.Id');
+                console.log("Ket noi thanh cong")
+            })
+            .catch(err => {
+                console.error(err);
+            });
+        var sendMessage = function (event) {
+            event.preventDefault();
+            var data = new FormData(event.target);
+            console.log(data)
+            document.getElementById('message-input').value = '';
+            console.log(event);
+            axios.post('/Admin/Chat/SendMessage', data)
+                .then(res => {
+                    console.log("Message Sent!")
+                    scrollToBottom()
+                })
+                .catch(err => {
+                    console.log("Failed to send message!")
+                })
+        }
+    </script>
+}
+

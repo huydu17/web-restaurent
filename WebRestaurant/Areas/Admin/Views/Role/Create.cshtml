@@ -1,0 +1,44 @@
+﻿@model RoleVM
+
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Phân quyền</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a asp-action="Index" asp-controller="Dashboard" asp-area="Admin" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Dashboard</a>
+                <a class="breadcrumb-item" asp-action="Index" asp-controller="Role" asp-area="Admin">Quản lý phân quyền</a>
+                <span class="breadcrumb-item active"> Tạo mới phân quyền</span>
+            </nav>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="m-t-25">
+                <div class="d-flex align-items-center m-b-30" style="justify-content:center">
+                    <img class="img-fluid" alt="" src="assets/images/logo/logo.png">
+                    <h2 class="m-b-0">Đăng ký phân quyền</h2>
+                </div>
+                <form method="post">
+                    <div class="form-group">
+                        <label class="font-weight-semibold" asp-for="Name">Phân quyền:</label>
+                        <input asp-for="Name" type="text" class="form-control"  placeholder="Tên phân quyền">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" asp-for="Description">Mô tả:</label>
+                        <input asp-for="Description" type="text" class="form-control" placeholder="Mô tả">
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>          
+                    <div class="form-group">
+                        <div class="d-flex align-items-center justify-content-between p-t-15">
+                            <div class="checkbox">                               
+                            </div>
+                            <button type = "submit" class="btn btn-primary">Đăng ký</button>
+                        </div>
+                    </div>
+                </form>
+            </div>      
+        </div>
+    </div>
+</div>

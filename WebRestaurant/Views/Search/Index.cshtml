@@ -1,0 +1,84 @@
+﻿@using WebRestaurant.Utility.Helpers;
+@model ProductCategoryVM
+<style>
+	.price-config {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+		.price-config .price {
+			margin-right: 3px;
+			margin-left: 3px;
+		}
+</style>
+
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<p class="bread"><span><a asp-action="Index" asp-controller="Home">Trang chủ</a></span> / <span>Sản phẩm</span></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="breadcrumbs-two">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<div class="breadcrumbs-img" style="background-image: url(/client-site/images/cover-img-1.jpg);">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="colorlib-product">
+	<div class="container">
+		<div class="col-lg-12">
+			<div class="row row-pb-md">
+				@foreach (var item in Model.Products)
+				{
+					<div class="col-lg-4 mb-4 text-center">
+						<div class="product-entry border">
+							@if (item.ProductImages != null && item.ProductImages.Count() > 0)
+							{
+								<a asp-action="Details" asp-controller="Product" asp-route-productId="@item.Id"><img src="@item.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" /></a>
+							}
+							else
+							{
+								<img src="https://placehold.co/500x600/png" class="card-img-top rounded" />
+							}
+							<div class="desc">
+								<h2><a href="#">@item.Name</a></h2>
+								<span class="price">@item.Price.ToVnd()</span>
+								<span class="price"><a asp-action="Details" asp-controller="Product" asp-route-productId="@item.Id"><i class="bi bi-eye"></i></a></span>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<div class="block-27">
+						<ul>
+							@if (Model.PageInfo.CurrentPage != 1)
+							{
+								<li><a asp-route-productpage="@(Model.PageInfo.CurrentPage - 1)"><i class="ion-ios-arrow-back"></i></a></li>
+							}
+							@for (int i = 1; i <= Model.PageInfo.TotalPages; i++)
+							{
+								<li><a asp-route-productpage="@i">@i</a></li>
+							}
+							@if (Model.PageInfo.CurrentPage != Model.PageInfo.TotalPages)
+							{
+								<li><a asp-route-productpage="@(Model.PageInfo.CurrentPage + 1)"><i class="ion-ios-arrow-forward"></i></a></li>
+							}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

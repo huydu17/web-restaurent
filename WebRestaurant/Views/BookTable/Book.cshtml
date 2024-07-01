@@ -1,0 +1,106 @@
+﻿@model BookTableVM
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .bg-top {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .custom-select {
+            width: 100%;
+        }
+
+        .btn-config {
+            background: #616161;
+            color: #fff;
+            border: 1px solid #616161;
+        }
+
+    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p class="bread"><span><a asp-action="Index" asp-controller="Home">Trang chủ</a></span> / <span>Đặt bàn</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <!-- Table Reservation Form -->
+    <section id="book-a-table" class="book-a-table">
+        <div class="container" data-aos="fade-up">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="row">
+                        <div class="col-md-9 offset-md-2 text-center">
+                            <h2>Đặt bàn</h2>
+                            <p class="mb-5 text-danger">Đặt bàn trực tuyến, tiết kiệm thời gian và không gian chờ đợi!</p>
+                        </div>
+                    </div>
+                    <form method="post" role="form">
+                        <div class="form-group">
+                            <input type="text" asp-for="Name" class="form-control" placeholder="Họ tên">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" asp-for="Email" placeholder="Email">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" asp-for="PhoneNumber" placeholder="Số điện thoại">
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="date" class="form-control" asp-for="ArrivalDate" placeholder="Date">
+                            <span asp-validation-for="ArrivalTime" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="time" class="form-control" asp-for="ArrivalTime" placeholder="Time">
+                            <span asp-validation-for="ArrivalTime" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" style="width:100%" name="NumberOfPeople" asp-items="ViewBag.NumberOfPeople">
+                                <option disabled selected value="">Số người</option>
+                                <span asp-validation-for="NumberOfPeople" class="text-danger"></span>
+                            </select>
+                        </div>
+                        <div class="form-group mt-2">
+                            <textarea class="form-control" asp-for="Message" placeholder="Lời nhắn" cols="30" rows="5"></textarea>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <input type="submit" value="Đặt bàn" class="btn btn-config">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-8 offset-md-2 text-center">
+                            <h2 class="text-primary"></h2>
+                            <p class="mb-5"></p>
+                            <p class="mb-5"></p>
+                        </div>
+                    </div>
+                    <img src="~/client-site/images/booktbl.jpg" style="max-width: 100%" />
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
+
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

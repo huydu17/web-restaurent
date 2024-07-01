@@ -1,0 +1,82 @@
+﻿@model ApplicationUser
+<style>
+	.list-group-item {
+		font-weight: bold;
+		color:red;
+	}
+</style>
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<p class="bread"><span><a asp-action="Index" asp-controller="Home">Trang chủ</a></span> / <span>Thông tin</span></p>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="colorlib-contact">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="form-group">
+					<ul class="list-group">
+						<li class="list-group-item"><a asp-action="Profile" asp-controller="Account">Thông tin</a></li>
+						<li class="list-group-item"><a asp-action="Update" asp-controller="Account">Cập nhật thông tin</a></li>
+						<li class="list-group-item"><a asp-action="ChangePass" asp-controller="Account">Đổi mật khẩu</a></li>
+						<li class="list-group-item"><a asp-action="Logout" asp-controller="Account">Đăng xuất</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="contact-wrap">
+					<h3>Thông tin</h3>
+					<form action="#" class="contact-form">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="fname">Họ:</label>
+									<input type="text" readonly asp-for="FirstName" class="form-control">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="fname">Họ:</label>
+									<input type="text" readonly asp-for="LastName" class="form-control">
+								</div>
+							</div>
+							<div class="w-100"></div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="fname">Tải khoản:</label>
+									<input type="text" readonly asp-for="UserName" class="form-control">
+								</div>
+							</div>
+							<div class="w-100"></div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="fname">Email:</label>
+									<input type="text" readonly asp-for="Email" class="form-control">
+								</div>
+							</div>
+							<div class="w-100"></div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="fname">Số điện thoại:</label>
+									<input type="text" readonly asp-for="PhoneNumber" class="form-control">
+								</div>
+							</div>
+							<div class="w-100"></div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="fname">Địa chỉ</label>
+									<input type="text" readonly asp-for="Address" class="form-control">
+								</div>
+							</div>
+							<div class="w-100"></div>					
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

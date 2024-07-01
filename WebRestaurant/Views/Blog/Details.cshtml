@@ -1,0 +1,44 @@
+﻿@model Blog
+
+<style>
+	.title-config{
+		font-weight:bold;
+		font-size:25px;
+	}
+
+	.title-header{
+		text-align:center;
+	}
+</style>
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<p class="bread"><span><a asp-action="Index" asp-controller="Home">Trang chủ</a></span>/ <span><a asp-action="Index" asp-controller="Blog">Blog</a></span>/<span>@Model.Title</span></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="colorlib-about">
+	<div class="container">
+		<div>
+			<div class="title-header">
+				<div class="title-config">@Model.Title</div>
+				<div>
+					<p>Bởi @Model.Author lúc @Model.CreateDate.ToShortDateString()</p>
+				</div>
+				<div class="mb-3">
+					<img src="@Model.ImageUrl" style="height: 400px" />
+					<div class="overlay"></div>
+				</div>
+			</div>
+			<div class="about-wrap">
+				<p>
+					@Html.Raw(Model.Description)
+				</p>
+			</div>
+		</div>
+	</div>
+</div>

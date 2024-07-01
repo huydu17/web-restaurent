@@ -1,0 +1,14 @@
+﻿@model List<Conversation>
+@foreach (var item in Model.Where(x=>x.Messages.Count > 0))
+{
+    <a class="chat-list-item p-h-25" asp-action="GetUser" asp-controller="Chat" asp-route-conversationId="@item.Id">
+        <div class="media align-items-center">
+            <div class="avatar avatar-image">
+                <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
+            </div>
+            <div class="p-l-15">
+                <h5 class="m-b-0">@item.Name</h5>
+            </div>
+        </div>
+    </a>
+}

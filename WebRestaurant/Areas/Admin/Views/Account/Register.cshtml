@@ -1,0 +1,91 @@
+﻿@model RegisterVM
+
+<div
+    class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Basic Table</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a asp-action="Index" asp-controller="Dashboard" asp-area="Admin" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Dashboard</a>
+                <a class="breadcrumb-item" asp-action="Index" asp-controller="User" asp-area="Admin">Quản lý người dùng</a>
+                <span class="breadcrumb-item active"> Đăng ký</span>
+            </nav>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="m-t-25">
+                <div class="d-flex align-items-center m-b-30" style="justify-content:center">
+                    <img class="img-fluid" alt="" src="assets/images/logo/logo.png">
+                    <h2 class="m-b-0">Đăng ký</h2>
+                </div>
+                <form method="post">
+                    <div class="row col-md0-12">
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-semibold" asp-for="FirstName">Họ:</label>
+                            <input type="text" asp-for="FirstName" class="form-control" placeholder="Họ">
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-semibold" asp-for="LastName">Tên:</label>
+                            <input type="text" asp-for="LastName" class="form-control" placeholder="Tên">
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" asp-for="UserName">Tài khoán:</label>
+                        <input type="text" asp-for="UserName" class="form-control" placeholder="Tài khoản">
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" asp-for="Email">Email:</label>
+                        <input type="email" asp-for="Email" class="form-control" placeholder="Email">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" asp-for="DoB">Ngày sinh:</label>
+                        <input type="date" asp-for="DoB" class="form-control" placeholder="Ngày sinh">
+                        <span asp-validation-for="DoB" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" asp-for="PhoneNumber">Số điện thoại:</label>
+                        <input type="text" asp-for="PhoneNumber" class="form-control" placeholder="Số điện thoại">
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" asp-for="Password">Mật khẩu:</label>
+                        <input type="password" asp-for="Password" class="form-control" placeholder="Mật khẩu">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" asp-for="PasswordConfirm">Nhập lại mật khẩu:</label>
+                        <input type="password" asp-for = "PasswordConfirm" class="form-control" placeholder="Nhập lại mật khẩu">
+                        <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" asp-for="Address">Địa chỉ:</label>
+                        <input type="text" asp-for="Address" class="form-control" placeholder="Địa chỉ">
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+    
+                    <div class="form-group">
+                        <label asp-for="RoleId"  class="font-weight-semibold">Phân quyền</label>
+                        <select asp-for="@Model.RoleId" value="RoleId"  asp-items="@Model.ListRole" class="form-control">
+                            <option disabled selected>--Phân quyền--</option>
+                        </select>
+          
+                        <span asp-validation-for="RoleId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="d-flex align-items-center justify-content-between p-t-15">
+                            <div class="checkbox">                          
+                            </div>
+                            <button type="submit" class="btn btn-primary">Đăng ký</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

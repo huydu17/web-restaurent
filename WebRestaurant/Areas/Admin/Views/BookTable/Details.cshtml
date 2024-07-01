@@ -1,0 +1,111 @@
+﻿@using WebRestaurant.Utility.Helpers;
+@model BookTable
+<style>
+    .col-12{
+        padding-left:50px;
+    }
+</style>
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Đơn hàng</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a asp-action="Index" asp-controller="Dashboard" asp-area="Admin" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Dashboard</a>
+                <a asp-action="Index" asp-controller="BookTable" asp-area="Admin" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Quản lý đơn đặt bàn</a>
+                <span class="breadcrumb-item active">Chi tiết</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="card-body">
+                <div class="container rounded p-2">
+                    <form method="post">
+                        <input asp-for="@Model.Id" hidden />
+                        <div class="row">
+                            <div class="col-12 pb-4">
+                                <div class="row">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-primary">Thông tin:</span>
+                                    </h4>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">Khách hàng:</div>
+                                    <div class="col-6">
+                                        <input asp-for="Name" readonly type="text" class="form-control" />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">Email:</div>
+                                    <div class="col-6">
+                                        <input asp-for="Email" readonly type="text" class="form-control" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">Số điện thoại:</div>
+                                    <div class="col-6">
+                                        <input asp-for="PhoneNumber" readonly type="text" class="form-control" />
+                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">Số người:</div>
+                                    <div class="col-6">
+                                        <input asp-for="NumberOfPeople" readonly type="text" class="form-control" />
+                                        <span asp-validation-for="NumberOfPeople" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">Ngày đặt:</div>
+                                    <div class="col-6">
+                                        <input asp-for="CreateDate" readonly type="text" class="form-control" />
+                                        <span asp-validation-for="CreateDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">Ngày đến:</div>
+                                    <div class="col-6">
+                                        <input asp-for="ArrivalDatetime" readonly type="text" class="form-control" />
+                                        <span asp-validation-for="ArrivalDatetime" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">Trạng thái:</div>
+                                    <div class="col-6">
+                                        <input asp-for="Status" readonly type="text" class="form-control" />
+                                        <span asp-validation-for="Status" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">Lời nhắn:</div>
+                                    <div class="col-6">
+                                        <input asp-for="Message" readonly type="text" class="form-control" />
+                                        <span asp-validation-for="Message" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3"></div>
+                                    <div class="col-6">
+                                        @if (Model.Status == SD.StatusPending)
+                                        {
+                                            <button asp-action="Confirm" asp-controller="BookTable" asp-route-id="@Model.Id" type="submit" class="btn btn-success text-white m-r-5 form-control my-1">Xác nhận</button>
+                                        }
+                                        @if (Model.Status != SD.StatusCancelled &&
+                                        Model.Status != SD.StatusApproved)
+                                        {
+                                            <button asp-action="Cancel" asp-controller="BookTable" asp-route-id="@Model.Id" type="submit" class="btn btn-danger text-white m-r-5 form-control my-1">Xác nhận huỷ</button>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

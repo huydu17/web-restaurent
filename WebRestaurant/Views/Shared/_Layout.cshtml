@@ -1,0 +1,218 @@
+﻿
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Savoria</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
+	<style> 
+		.top-header-top{
+			padding-bottom:10px;
+		}
+
+		.headertop li a{
+			padding:5px 7px
+		}
+
+		.config-slide{
+			display:flex;
+			justify-content:center;
+		}
+		.config-slide h4{
+				color: white;
+				font-weight:bold;
+		}
+	</style>
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="~/client-site/css/animate.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="~/client-site/css/icomoon.css">
+	<!-- Ion Icon Fonts-->
+	<link rel="stylesheet" href="~/client-site/css/ionicons.min.css">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="~/client-site/css/bootstrap.min.css">
+
+	<!-- Magnific Popup -->
+	<link rel="stylesheet" href="~/client-site/css/magnific-popup.css">
+
+	<!-- Flexslider  -->
+	<link rel="stylesheet" href="~/client-site/css/flexslider.css">
+
+	<!-- Owl Carousel -->
+	<link rel="stylesheet" href="~/client-site/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="~/client-site/css/owl.theme.default.min.css">
+
+	<!-- Date Picker -->
+	<link rel="stylesheet" href="~/client-site/css/bootstrap-datepicker.css">
+	<!-- Flaticons  -->
+	<link rel="stylesheet" href="~/client-site/fonts/flaticon/font/flaticon.css">
+	<link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
+	<!-- Theme style  -->
+	<link rel="stylesheet" href="~/client-site/css/style.css">
+	<link href="~/client-site/css/slide.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+	<div id="page">
+		<nav class="colorlib-nav" role="navigation">
+			<div class="top-menu">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-12 text-left menu-1 top-header-top">
+							<ul>		
+								<li class="cart headertop">
+									
+								</li>		
+							</ul>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-7 col-md-9">
+							<div id="colorlib-logo"><a href="index.html">Savoria</a></div>
+						</div>
+						<div class="col-sm-5 col-md-3">
+							<form method="get" asp-action="Index" asp-controller="Search" class="search-wrap">
+								<div class="form-group">
+									<input type="search" class="form-control search" name="keyword" value="@ViewBag.Keyword" placeholder="Tìm kiếm">
+									<button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12 text-left menu-1">
+							<ul>
+								<li><a asp-action="Index" asp-controller="Home">Trang chủ</a></li>
+								<li><a asp-action="About" asp-controller="Home">Giới thiệu</a></li>
+								<li><a asp-action="Index" asp-controller="Product">Thực đơn</a></li>
+								<li><a asp-action="Book" asp-controller="BookTable">Đặt bàn</a></li>
+								<li><a asp-action="Index" asp-controller="Blog">Blog</a></li>
+								<li><a asp-action="Contact" asp-controller="Home">Liên hệ</a></li>
+								<li class="cart">@await Component.InvokeAsync("GetName")</li>
+				
+						 	 	<li class="cart">
+									<a asp-action="Index" asp-controller="Cart">
+										<i class="icon-shopping-cart"></i>@await Component.InvokeAsync("ShoppingCart")
+									</a>
+								</li> 				
+								<li class="cart"><a asp-action="WishList" asp-controller="Cart"><i class="bi bi-heart"></i></a></li>
+								@if (!User.IsInRole(SD.Role_Admin))
+								{
+									<li class="cart"><a asp-action="Index" asp-controller="Chat" asp-route-conversaionId=""><i class="bi bi-chat-dots"></i></a></li>
+								}
+								
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="sale">
+				<div class="container config-slide">
+					<h4>Kính chào quý khách đến với nhà hàng chúng tôi</h4>
+				</div>
+			</div>
+		</nav>
+		@RenderBody()
+		<footer id="colorlib-footer" role="contentinfo">
+			<div class="container">
+				<div class="row row-pb-md">
+					<div class="col footer-col colorlib-widget">
+						<h4>Về Savoria</h4>
+						<p></p>
+						<p>
+							<ul class="colorlib-social-icons">
+								<li><a href="#"><i class="icon-twitter"></i></a></li>
+								<li><a href="#"><i class="icon-facebook"></i></a></li>
+								<li><a href="#"><i class="icon-linkedin"></i></a></li>
+								<li><a href="#"><i class="icon-dribbble"></i></a></li>
+							</ul>
+						</p>
+					</div>
+					<div class="col footer-col colorlib-widget">
+						<h4>Liên hệ</h4>
+						<p>
+							<ul class="colorlib-footer-links">
+								<li><a href="#">Liên he</a></li>
+							</ul>
+						</p>
+					</div>
+					<div class="col footer-col colorlib-widget">
+						<h4>Thông tin</h4>
+						<p>
+							<ul class="colorlib-footer-links">
+								<li><a href="#">Giới thiệu</a></li>
+								<li><a href="#">Thông tin vận chuyển</a></li>
+							</ul>
+						</p>
+					</div>
+
+					<div class="col footer-col">
+						<h4>Tin tức</h4>
+						<ul class="colorlib-footer-links">
+							<li><a href="blog.html">Bài viết</a></li>
+						</ul>
+					</div>
+
+
+					<div class="col footer-col">
+						<h4>Thông tin liên hệ</h4>
+						<ul class="colorlib-footer-links">
+							<li>K117, <br> Nguyễn Lương Bằng</li>
+							<li><a href="tel://1234567920">+84123456789</a></li>
+							<li><a href="mailto:info@yoursite.com">soccerstyle@gmail.com</a></li>
+							<li><a href="#">soccerstyle.com</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="copy">
+				<div class="row">
+					<div class="col-sm-12 text-center">
+						<p>
+							
+						</p>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</div>
+
+	<div class="gototop js-top">
+		<a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
+	</div>
+
+	<!-- jQuery -->
+	<script src="~/client-site/js/jquery.min.js"></script>
+	<!-- popper -->
+	<script src="~/client-site/js/popper.min.js"></script>
+	<!-- bootstrap 4.1 -->
+	<script src="~/client-site/js/bootstrap.min.js"></script>
+	<!-- jQuery easing -->
+	<script src="~/client-site/js/jquery.easing.1.3.js"></script>
+	<!-- Waypoints -->
+	<script src="~/client-site/js/jquery.waypoints.min.js"></script>
+	<!-- Flexslider -->
+	<script src="~/client-site/js/jquery.flexslider-min.js"></script>
+	<!-- Owl carousel -->
+	<script src="~/client-site/js/owl.carousel.min.js"></script>
+	<!-- Magnific Popup -->
+	<script src="~/client-site/js/jquery.magnific-popup.min.js"></script>
+	<script src="~/client-site/js/magnific-popup-options.js"></script>
+	<!-- Date Picker -->
+	<script src="~/client-site/js/bootstrap-datepicker.js"></script>
+	<!-- Stellar Parallax -->
+	<script src="~/client-site/js/jquery.stellar.min.js"></script>
+	
+	<script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+	<!-- Main -->
+    <script src="~/client-site/js/main.js"></script>
+    <script src="~/client-site/js/slide.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	@await Component.InvokeAsync("Notyf")
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+

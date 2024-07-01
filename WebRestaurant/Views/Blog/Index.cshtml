@@ -1,0 +1,41 @@
+﻿@model List<Blog>
+<style>
+	.title-config{
+		font-weight:bold;
+	}
+</style>
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<p class="bread"><span><a asp-action="Index" asp-controller="Home">Trang chủ</a></span>/ <span>Blog</span></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<br />
+<br />
+<div class="colorlib-featured">
+	<div class="container">
+		<div class="row">
+			@foreach(var item in Model)
+			{
+				<div class="col-sm-4">
+					<a asp-route-id="@item.Id" asp-action="Details" asp-controller="Blog">
+						<div class="featured">
+							<div class="featured-img featured-img-2">
+								<img src="@item.ImageUrl" style="max-width: 100%" />
+								<div class="title-config pt-4">@item.Title</div>
+								<div><span>@item.ShortDescription</span></div>
+							</div>
+						</div>
+					</a>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+<br />
+<br />

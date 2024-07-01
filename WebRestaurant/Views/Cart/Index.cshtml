@@ -1,0 +1,224 @@
+﻿@using WebRestaurant.Utility.Helpers;
+@model ShoppingCartVM
+<style>
+	.img-config{
+		padding-top:20px;
+	}
+</style>
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<p class="bread"><span><a asp-action="Index" asp-controller="Home">Trang chủ</a></span>/ <span>Giỏ hàng</span></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="colorlib-product">
+	<div class="container">
+		<div class="row row-pb-lg">
+			<div class="col-md-10 offset-md-1">
+				<div class="process-wrap">
+					<div class="process text-center active">
+						<p><span>01</span></p>
+						<h3>Giỏ hàng</h3>
+					</div>
+					<div class="process text-center">
+						<p><span>02</span></p>
+						<h3>Thanh toán</h3>
+					</div>
+					<div class="process text-center">
+						<p><span>03</span></p>
+						<h3>Hoàn tất</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row row-pb-lg">
+			<div class="col-md-12">
+				<div class="product-name d-flex">
+					<div class="one-forth text-left px-4">
+						<span>Chi tiết sản phẩm</span>
+					</div>
+					<div class="one-forth text-center">
+						<span>Giá</span>
+					</div>
+					<div class="one-eight text-center">
+						<span>Số lượng</span>
+					</div>
+					<div class="one-eight text-center">
+						<span>Tổng tiền</span>
+					</div>
+					<div class="one-eight text-center px-4">
+						<span>Xoá</span>
+					</div>
+				</div>
+				@foreach(var item in Model.ShoppingCartList)
+				{
+				
+					<div class="update-product">
+						<input type="hidden" class="cartId" value="@item.Id" />
+						<input type="hidden" class="productId" value="@item.Product.Id" />
+						<div class="product-cart d-flex">
+							<div class="one-forth">
+								<div class="product-img" style="background-image">
+									@if (item.Product.ProductImages != null && item.Product.ProductImages.Count() > 0)
+									{
+										<img src="@item.Product.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded w-100 img-config" />
+									}
+									else
+									{
+										<img src="https://placehold.co/500x600/png" class="card-img-top rounded w-100" />
+									}
+								</div>
+
+								<div class="display-tc">
+									<h3>@item.Product.Name</h3>
+								</div>
+							</div>
+							<div class="one-forth text-center">
+								<div class="display-tc">
+									<span class="price">@item.Price.ToVnd()</span>
+								</div>
+							</div>	
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<input type="number" id="quantity" class="form-control input-number text-center" value="@item.Quantity" min="1" max="100">		
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<span class="price">@item.Total.ToVnd()</span>
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<a asp-action="Remove" asp-controller="Cart" asp-route-cartId="@item.Id" class="closed"></a>
+								</div>
+							</div>
+						</div>
+					</div>	
+				}
+				@if (Model.ShoppingCartList.Count() > 0)
+				{
+					<div class="total-wrap">
+						<div class="row">
+							<div class="col-sm-8">
+								<button type="button" class="btn btn-primary btn-addtocart update-cart">
+									<span class="addtocart-content">Cập nhật giỏ hàng</span>
+								</button>
+							</div>
+							<div class="col-sm-4 text-center">
+								<div class="total">
+
+									<div class="grand-total">
+										<p><span><strong>Tổng tiền:</strong></span> <span>@Model.OrderHeader.OrderTotal.ToVnd()</span></p>
+									</div>
+								</div>
+
+								<form action="#">
+									<div class="row form-group">
+										<div class="col-sm-3 pt-2">
+											<a asp-action="Index" asp-controller="Checkout" class="btn btn-primary">Tiến hành thanh toán</a>
+										</div>
+									</div>
+								</form>
+
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+		<div class="row row-pb-lg">
+			<div class="col-md-12">
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<style>
+	.quantity {
+		display: flex;
+	}
+
+	.input-quantity {
+		margin: 0 auto;
+	}
+	.input-quantity{
+		width:50px;
+		text-align:center;
+	}
+
+	.select-config{
+		width:90px;
+	}
+</style>
+@section Scripts{
+	<script>
+		function increment() {
+			var input = document.getElementById("quantityInput");
+			var value = parseInt(input.value);
+			input.value = value + 1;
+		}
+
+		function decrement() {
+			var input = document.getElementById("quantityInput");
+			var value = parseInt(input.value);
+			if (value > 0) {
+				input.value = value - 1;
+			}
+		}
+
+	</script>
+	<!--Cập nhật giỏ hàng-->
+	<script>
+			$(document).ready(function () {
+				$('.update-cart').click(function () {
+					var carts = [];
+				$('.update-product').each(function () {
+					const size = $(this).find("#size-select").val();
+					const count = $(this).find("#quantity").val();
+					const cartId = $(this).find(".cartId").val(); 
+					const productId = $(this).find(".productId").val();
+						var cart = {
+							CartId: cartId,
+							Quantity: count,
+							Size: size,
+							ProductId: productId
+						};
+						carts.push(cart);
+					});
+					console.log(carts);
+					$.ajax({
+						url: "/Cart/Update",
+						type: 'post',
+						data: {
+							carVm: carts
+						},
+						success: function (data) {
+							Swal.fire({
+								icon: "success",
+								title: "Cập nhật thành công!",
+								showConfirmButton: false,
+								timer: 1500
+							});
+							setTimeout(function () {
+								window.location.reload();
+							},1500)
+						},
+						error: function () {
+							Swal.fire({
+								icon: "error",
+								title: "Thêm vào giỏ hàng thất bại",
+								text: "Vui lòng thử lại!",
+							})
+						}
+					});
+				});
+			});
+	</script>
+}

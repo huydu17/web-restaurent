@@ -1,0 +1,146 @@
+﻿@using WebRestaurant.Utility.Helpers;
+@model ShoppingCartVM
+<style>
+    .config-bg{
+        background:black;
+    }
+</style>
+
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p class="bread"><span><a asp-action="Index" asp-controller="Home">Trang chủ</a></span>/<span><a asp-action="Index" asp-controller="Cart">Giỏ hàng</a></span> / <span>Thanh toán</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="colorlib-product">
+	<div class="container">
+		<div class="row row-pb-lg">
+			<div class="col-sm-10 offset-md-1">
+				<div class="process-wrap">
+					<div class="process text-center active">
+						<p><span>01</span></p>
+						<h3>Giỏ hàng</h3>
+					</div>
+					<div class="process text-center active">
+						<p><span>02</span></p>
+						<h3>Thanh toán</h3>
+					</div>
+					<div class="process text-center">
+						<p><span>03</span></p>
+						<h3>Hoàn tất</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div class="card">
+            <div class="card-body">
+                <div class="card-body">
+                    <div class="container rounded p-2">
+                        <form method="post">
+    @*                         <input asp-for="@Model.OrderHeader.Id" hidden /> *@
+                            <div class="row">
+                                <div class="col-12 col-lg-6 pb-4">
+                                    <div class="row">
+                                        <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="text-primary">Thông tin:</span>
+                                        </h4>
+                                    </div>
+                                    <div class="w-100"></div>
+                               
+                                    <div class="form-group">
+                                        <label for="lname">Họ tên*</label>
+                                        <input type="text" asp-for="OrderHeader.Name" class="form-control" placeholder="Họ tên" />
+                                        <span asp-validation-for="OrderHeader.Name" class="text-danger"></span>
+                                    </div>
+                                    <div class="w-100"></div>
+
+                                    <div class="form-group">
+                                        <label for="lname">Số điện thoại*</label>
+                                        <input type="text" asp-for="OrderHeader.Phone" class="form-control" placeholder="Số điện thoại" />
+                                        <span asp-validation-for="OrderHeader.Phone" class="text-danger"></span>
+                                    </div>
+                                    <div class="w-100"></div>
+
+                                    <div class="form-group">
+                                        <label for="lname">Địa chỉ*</label>
+                                        <input type="text" asp-for="OrderHeader.Address" class="form-control" placeholder="Địa chỉ" />
+                                        <span asp-validation-for="OrderHeader.Address" class="text-danger"></span>
+                                    </div>
+                                    <div class="w-100"></div>
+                                    <div class="form-group">
+                                        <label for="lname">Lời nhắn</label>
+                                        <textarea type="text" asp-for="OrderHeader.OrderNote" class="form-control" placeholder="Lời nhắn"></textarea>
+                                    </div>
+                                    <div class="w-100"></div>                                                                                     
+                                </div>
+                                <div class="col-12 col-lg-5 offset-lg-1">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-primary">Chi tiết</span>
+                                    </h4>                 
+                                    <ul class="list-group mb-3">
+                                        @foreach (var item in Model.ShoppingCartList)
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between p-2">
+                                                <div class="row container">
+                                                    <div class="col-8">
+
+														<h6 class="my-0 text-primary">@item.Product.Name</h6>
+														<small class="text-muted">Giá : @item.Price.ToVnd()</small><br />
+														<small class="text-muted">Số lượng : @item.Quantity</small>
+                                                    </div>
+                                                    <div class="col-4 text-end">
+														<p class="text-success">@item.Total.ToVnd()</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                        <li class="config-bg list-group-item badge-success">
+                                            <div class="row container">
+                                                <div class="col-6">
+                                                    <h5 class="text-light">Tổng:</h5>
+                                                </div>
+                                                <div class="col-6 text-end">
+                                                    <h5 class="text-light">@Model.OrderHeader.OrderTotal.ToVnd()</h5>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <div class="mt-3">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <div class="radio">
+                                                        <label><input class="checkout-value" asp-for="OrderHeader.PaymemtMethod" type="radio" value="COD" checked> Thanh toán khi nhận hàng</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <div class="radio">
+                                                        <label><input class="checkout-value" asp-for="OrderHeader.PaymemtMethod" type="radio" value="Online"> Thanh toán Online</label>
+                                                    </div>
+                                                </div>
+                                            </div>               
+                                        </div>
+										<div class="col-md-12 mt-2">
+											<p><button type="submit" class="btn btn-primary ajax-checkout">Thanh toán</button></p>
+										</div>
+                                    </ul>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{
+    <partial name="_ValidationScriptsPartial" />
+    }
+}

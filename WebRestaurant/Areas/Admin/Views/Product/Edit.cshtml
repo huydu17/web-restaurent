@@ -1,0 +1,156 @@
+﻿@model ProductVM
+
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Sản phẩm</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a asp-action="Index" asp-controller="Dashboard" asp-area="Admin" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Dashboard</a>
+                <a class="breadcrumb-item" asp-action="Index" asp-controller="Product" asp-area="Admin">Quản lý sản phẩm</a>
+                <span class="breadcrumb-item active"> Chỉnh sửa sản phẩm</span>
+            </nav>
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        <input asp-for="Product.Id" type="hidden"/>
+            <div class="page-header no-gutters has-tab">
+                <div class="d-md-flex align-items-center justify-content-between">
+                    <div class="media align-items-center m-l-15">
+                        <div>
+                            <h4 class="m-b-0"><strong>@Model.Product.Name</strong></h4>
+                            <p class="text-muted m-b-0">Mã: #@Model.Product.Id</p>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="anticon anticon-save"></i>
+                            <span>Cập nhật</span>
+                        </button>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#product-edit-basic">Thông tin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#product-edit-option">Quản lý ảnh</a>
+                    </li>
+                </ul>
+            </div>
+        <div class="tab-content m-t-15">
+            <div class="tab-pane fade show active" id="product-edit-basic">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="font-weight-semibold" asp-for="Product.Name">Sản phẩm</label>
+                            <input type="text" class="form-control" asp-for="Product.Name" placeholder="Tên sản phẩm" />
+                            <span asp-validation-for="Product.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-semibold" asp-for="Product.ShortDescription">Mô tả ngắn</label>
+                            <input type="text" class="form-control" asp-for="Product.ShortDescription" placeholder="Mô tả" />
+                            <span asp-validation-for="Product.ShortDescription" class="text-danger"></span>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="font-weight-semibold" asp-for="Product.Price">Giá gốc</label>
+                            <input type="text" class="form-control" asp-for="Product.Price" placeholder="Mô tả" />
+                            <span asp-validation-for="Product.Price" class="text-danger"></span>
+                        </div>       
+                        <div class="form-group">
+                            <label asp-for="Product.CategoryId" class="ms-2">Danh mục</label>
+                            <select asp-for="@Model.Product.CategoryId" asp-items="@Model.CategoryList" class="form-control">
+                                <option disabled selected>--Chọn danh mục--</option>
+                            </select>
+                            <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                        </div>
+                  
+                        <div class="form-group">
+                            <label class="font-weight-semibold" asp-for="Product.Status">Trạng thái</label> <br />
+                            <div class="row col-md-8">
+                                <label class="col-md-3">
+                                    <input asp-for="Product.Status" value="true" type="radio" /> @SD.InStock
+                                </label>
+                                <label class="col-md-4">
+                                    <input asp-for="Product.Status" value="false" type="radio" /> @SD.OutOfStock
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <label class="font-weight-semibold" asp-for="Product.Description">Mô tả chi tiết</label>
+                        <textarea type="text" class="form-control" asp-for="Product.Description" placeholder="Mô tả"></textarea>
+                        <span asp-validation-for="Product.Description" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="tab-pane fade" id="product-edit-option">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="row">
+                            @if (Model.Product.ProductImages != null)
+                            {
+                            
+                                foreach (var image in Model.Product.ProductImages)
+                                {
+                                   
+                                        <div class="config-img">
+                                            <img src="@image.ImageUrl"
+                                                 style="border-radius:5px; border:1px solid #bbb9b9;height:200px;" />
+                                            <div>
+                                                <a asp-action="DeleteImage" class="btn btn-danger" asp-route-imageId="@image.Id">
+                                                    <i class="bi bi-trash-fill"></i> Xoá
+                                                </a>
+                                            </div>   
+                                        </div>                            
+                                }
+                              
+                            }
+                            </div>
+                        </div>
+       
+                            <div class="form-control">
+                                <label asp-for="Product.ProductImages" class="ms-2">Hình ảnh</label>
+                                <input type="file" name="files" class="form-control" multiple />
+                            </div>
+                        </div>                 
+                    </div>
+                </div>   
+            </div>                     
+    </form>
+</div>
+
+<style>
+    .config-img img{
+        margin-left: 10px;
+        margin-right:10px;
+        width:200px;
+        height:300px;
+    }
+    .config-img{
+        text-align:center;
+        width:20%;
+    }
+</style>
+
+@section Scripts{
+    <!-- Place the first <script> tag in your HTML's <head> -->
+    <script src="https://cdn.tiny.cloud/1/13uc0fv8mr1svucgzy67yw3f984ys2owii8ka24ewek8i2tx/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
+    </script>
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

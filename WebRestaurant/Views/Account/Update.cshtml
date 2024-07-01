@@ -1,0 +1,79 @@
+﻿@model UpdateProfileVM
+<style>
+	.list-group-item {
+		font-weight: bold;
+		color: red;
+	}
+</style>
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<p class="bread"><span><a asp-action="Index" asp-controller="Home">Trang chủ</a></span>/<span><a asp-action="Profile" asp-controller="Account">Thông tin</a></span> / <span>Cập nhật thông tin</span></p>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="colorlib-contact">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="form-group">
+					<ul class="list-group">
+						<li class="list-group-item"><a asp-action="Profile" asp-controller="Account">Thông tin</a></li>
+						<li class="list-group-item"><a asp-action="Update" asp-controller="Account">Cập nhật thông tin</a></li>
+						<li class="list-group-item"><a asp-action="ChangePass" asp-controller="Account">Đổi mật khẩu</a></li>
+						<li class="list-group-item"><a asp-action="Logout" asp-controller="Account">Đăng xuất</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="contact-wrap">
+					<h3>Thông tin</h3>
+					<form method="post" class="contact-form">
+						<input asp-for="@Model.Id" hidden/>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="fname">Họ:</label>
+									<input type="text"  asp-for="FirstName" class="form-control">
+									<span asp-validation-for="FirstName" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="fname">Họ:</label>
+									<input type="text"  asp-for="LastName" class="form-control">
+									<span asp-validation-for="LastName" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="w-100"></div>
+							<div class="w-100"></div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="fname">Số điện thoại:</label>
+									<input type="text"  asp-for="PhoneNumber" class="form-control">
+									<span asp-validation-for="PhoneNumber" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="w-100"></div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="fname">Địa chỉ</label>
+									<input type="text"  asp-for="Address" class="form-control">
+									<span asp-validation-for="Address" class="text-danger"></span>
+								</div>
+							</div>				
+							<div class="w-100"></div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<input type="submit" value="Cập nhật" class="btn btn-primary">
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

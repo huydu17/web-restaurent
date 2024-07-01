@@ -1,0 +1,131 @@
+﻿
+<style>
+    .list-group-horizontal-sm {
+        display: flex;
+        flex-direction: row;
+        padding: 0;
+        list-style-type: none;
+    }
+
+        .list-group-horizontal-sm a {
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .list-group-horizontal-sm li {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .list-group-horizontal-sm a {
+            font-weight: 500;
+        }
+
+    table.dataTable tbody th, table.dataTable tbody td {
+        font-weight: 500;
+    }
+</style>
+
+
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p class="bread"><span><a asp-action="Index" asp-controller="Home">Trang chủ</a></span> / <span>Đơn đặt bàn</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Content Wrapper START -->
+<div class="colorlib-product">
+    <div class="container">
+
+        <div class="table-responsive pt-2">
+            <table id="tblData" class="table table-hover e-commerce-table">
+                <thead>
+                    <tr>
+                        <th>Tên</th>
+                        <th>Số điện thoại</th>
+                        <th>Số người</th>
+                        <th>Giờ đến</th>
+                        <th>Trạng thái</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        var datatbl;
+        $(document).ready(function () {
+            loadDataTable();
+        });
+        function loadDataTable() {
+            datatbl = $('#tblData').DataTable({
+                'order':false,
+                'info': false,
+                'autoWidth': false,
+                'lengChange': false,
+                'bordering': false,
+                "ajax": { url: '/booktable/getall' },
+                "columns": [
+                    { data: 'name', "width": "20%" },
+                    { data: 'phoneNumber', "width": "15%" },
+                    { data: 'numberOfPeople', "width": "10%" },
+                    {
+                        data: 'arrivalDatetime',
+                        "render": function (data) {
+                            var date = new Date(data);
+                            return date.toLocaleString()
+                        },
+                        "width": "15%"
+                    },
+                    { data: 'status', "width": "15%" },   
+                    {
+                        data: 'id',
+                        "render": function (data) {
+                            return ` <div class="w-75 btn-group" role="group">
+                                                <a href="/booktable/details?id=${data}" class="btn btn-primary btn-tone m-r-5">
+                                                                 <i class="bi bi-pencil"></i>
+                                                </a>
+                                                    <a onClick=Delete('/booktable/delete/${data}') class="btn btn-danger btn-tone m-r-5 delete-btn">
+                                             <i class="bi bi-archive-fill"></i>
+                                                </a>
+                                            </div>`
+                        },
+                        "width": "10%"
+                    },
+                ]
+            });
+        }
+
+        function Delete(url) {
+            Swal.fire({
+                title: 'Bạn có muốn xoá?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý!',
+                cancelButtonText: "Huỷ"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: 'DELETE',
+                        success: function (data) {
+                            datatbl.ajax.reload();
+                            toastr.success(data.message);
+                        }
+                    })
+                }
+            })
+        }
+    </script>
+}

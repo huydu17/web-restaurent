@@ -1,0 +1,112 @@
+﻿@using WebRestaurant.Utility.Helpers;
+@model List<CartItemVM>
+
+<style>
+	.font-cart{
+		font-size:12;
+	}
+	.img-config {
+		padding-top: 20px;
+	}
+</style>
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<p class="bread"><span><a asp-action="Index" asp-controller="Home">Trang chủ</a></span>/ <span>Yêu thích</span></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="colorlib-product">
+	<div class="container">
+		<div class="row row-pb-lg">
+			<div class="col-md-12">
+				<div class="product-name d-flex">
+					<div class="one-forth text-left px-4">
+						<span>Chi tiết sản phẩm</span>
+					</div>
+					<div class="one-forth text-center">
+						<span>Giá</span>
+					</div>
+					<div class="one-forth text-center">
+						<span>Số lượng</span>
+					</div>	
+					<div class="one-eight text-center px-4">
+						<span>Xoá</span>
+					</div>
+				</div>
+				@foreach (var item in Model)
+				{
+
+					<div class="update-product">
+						<input type="hidden" class="productId" value="@item.Product.Id" />
+						<div class="product-cart d-flex">
+							<div class="one-forth">
+								<div class="product-img" style="background-image">
+									@if (item.Product.ProductImages != null && item.Product.ProductImages.Count() > 0)
+									{
+										<img src="@item.Product.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded w-100 img-config" />
+									}
+									else
+									{
+										<img src="https://placehold.co/500x600/png" class="card-img-top rounded w-100" />
+									}
+								</div>
+
+								<div class="display-tc">
+									<h3>@item.Product.Name</h3>
+								</div>
+							</div>
+							<div class="one-forth text-center">
+								<div class="display-tc">
+									<span class="price">@item.Product.Price.ToVnd()</span>
+								</div>
+							</div>
+							<div class="one-forth text-center">
+								<div class="display-tc">
+									<input type="number" id="quantity" class="form-control input-number text-center" value="@item.Quantity" min="1" max="100">
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<a asp-action="RemoveWishList" asp-controller="Cart" asp-route-guidId="@item.GuidId" class="closed"></a>
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<a asp-action="Details" asp-controller="Product" asp-route-productId ="@item.Product.Id" type="submit" class="btn btn-primary font-cart"> Chi tiết</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				}
+			</div>
+		</div>
+		<div class="row row-pb-lg">
+			<div class="col-md-12">
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<style>
+	.quantity {
+		display: flex;
+	}
+	.input-quantity {
+		margin: 0 auto;
+	}
+	.input-quantity {
+		width: 50px;
+		text-align: center;
+	}
+
+	.select-config {
+		width: 90px;
+	}
+</style>

@@ -1,0 +1,73 @@
+﻿@model Category
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Sản phẩm</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a asp-action="Index" asp-controller="Dashboard" asp-area="Admin" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Dashboard</a>
+                <a class="breadcrumb-item" asp-action="Index" asp-controller="Category" asp-area="Admin">Quản lý danh mục</a>
+                <span class="breadcrumb-item active"> Chỉnh sửa danh mục</span>
+            </nav>
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        <input asp-for="Id" type="hidden"/>
+            <div class="page-header no-gutters has-tab">
+                <div class="d-md-flex align-items-center justify-content-between">
+                    <div class="media align-items-center m-l-15">
+                        <div>
+                            <h4 class="m-b-0"><strong>@Model.Name</strong></h4>
+                            <p class="text-muted m-b-0">Mã: #@Model.Id</p>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="anticon anticon-save"></i>
+                            <span>Cập nhật</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        <div class="tab-content m-t-15">
+            <div class="tab-pane fade show active" id="product-edit-basic">
+                <div class="card">
+                    <div class="row m-l-5">
+                        <div class="card-body col-md-9">
+                            <div class="form-group">
+                                <label class="font-weight-semibold" asp-for="Name">Danh mục</label>
+                                <input type="text" class="form-control" asp-for="Name" placeholder="Tên danh mục" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="font-weight-semibold" asp-for="Description">Mô tả</label>
+                                <input type="text" class="form-control" asp-for="Description" placeholder="Mô tả" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="font-weight-semibold" asp-for="Status">Trạng thái</label> <br />
+                                <div class="row col-md-8">
+                                    <label class="col-md-3">
+                                        <input asp-for="Status" value="true" type="radio" /> @SD.Active
+                                    </label>
+                                    <label class="col-md-4">
+                                        <input asp-for="Status" value="false" type="radio" /> @SD.Inactive
+                                    </label>
+                                </div>
+                            </div>
+            
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>         
+        </div>
+    </form>
+</div>
+<style>
+</style>
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

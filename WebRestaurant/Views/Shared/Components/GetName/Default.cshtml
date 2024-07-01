@@ -1,0 +1,29 @@
+﻿@model ApplicationUser
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="dropdown">
+        <a class="dropdown-toggle" href="#" role="button" id="accountDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Hi @Model.LastName <i class="bi bi-person"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-sm" aria-labelledby="accountDropdown">
+            <div class="dropdown-content">
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="dropdown-item" asp-action="Index" asp-controller="Dashboard" asp-area="Admin">ADMIN</a>
+                }
+                @if (!User.IsInRole("Admin"))
+                {
+                    <a class="dropdown-item" asp-action="Profile" asp-controller="Account">Thông tin</a>
+                    <a class="dropdown-item" asp-action="Index" asp-controller="BookTable">Đặt bàn</a>
+                    <a class="dropdown-item" asp-action="Index" asp-controller="Order">Đơn hàng</a>
+                }
+                <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Đăng xuất</a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <a asp-action="Login" asp-controller="Account"><i class="bi bi-person"></i></a>
+}

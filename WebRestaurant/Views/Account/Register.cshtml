@@ -1,0 +1,92 @@
+﻿@model RegisterVM
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p class="bread"><span><a asp-action="Index" asp-controller="Home">Trang chủ</a></span> / <span>Đăng ký</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="colorlib-contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div>
+                    <form method="post" class="contact-form">
+                        <div class="row">                  
+                            <div class="col-md-6 col-12">
+                                <label>Họ*</label>
+                                <input type="text" asp-for="FirstName" class="form-control" placeholder="Họ">
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <label>Tên*</label>
+                                <input type="text" asp-for="LastName" class="form-control" placeholder="Tên">
+                                <span asp-validation-for="LastName" class="text-danger"></span>                        
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Tài khoản*</label>
+                                    <input type="text" asp-for="UserName" class="form-control" placeholder="Tài khoản">
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Email*</label>
+                                    <input type="email" asp-for="Email" class="form-control" placeholder="Email">
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Mật khẩu*</label>
+                                    <input type="password" asp-for="Password" class="form-control" placeholder="Mật khẩu">
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Nhập lại mật khẩu*</label>
+                                    <input type="password" asp-for="PasswordConfirm" class="form-control" placeholder="Nhập lại mật khẩu">
+                                    <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Số điện thoại</label>
+                                    <input type="text" asp-for="PhoneNumber" class="form-control" placeholder="Số điện thoại">
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Đại chỉ</label>
+                                    <input type="text" asp-for="Address" class="form-control" placeholder="Địa chỉ">
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <button type="submit" class="btn custom-btn md-size">Đăng ký</button>
+                                </div>
+                            </div>
+               
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

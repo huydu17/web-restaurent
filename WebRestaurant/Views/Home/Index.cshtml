@@ -1,0 +1,66 @@
+﻿@using WebRestaurant.Utility.Helpers;
+@model List<Product>
+<style>
+	.price-config {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.price-config .price {
+		margin-right: 3px;
+		margin-left: 3px;
+	}
+</style>
+
+<div>
+	<img src="~/client-site/images/bg-restaurant.png" width="100%"/>
+</div>
+<div class="colorlib-intro">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12 text-center">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="colorlib-product">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-8 offset-sm-2 text-center colorlib-heading">
+				<h2>Món mới</h2>
+			</div>
+		</div>
+		<div class="row row-pb-md">
+			@foreach (var item in Model)
+			{
+				<div class="col-lg-3 mb-4 text-center">
+					<div class="product-entry border">
+						<a asp-action="Details" asp-controller="Product" asp-route-productId="@item.Id">
+							@if (item.ProductImages != null && item.ProductImages.Count() > 0)
+							{
+								<img src="@item.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" style="height:230px;" />
+							}
+							else
+							{
+								<img src="https://placehold.co/500x600/png" class="card-img-top rounded" />
+							}
+						</a>
+						<div class="desc">
+							<h2><a href="#">@item.Name</a></h2>
+							<span class="price">@item.Price.ToVnd()</span>
+							<span class="price"><a asp-action="Details" asp-controller="Product" asp-route-productId="@item.Id"><i class="bi bi-eye"></i></a></span>
+						</div>
+					</div>		
+				</div>
+			}
+		</div>
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<p><a asp-action="Index" asp-controller="Product" class="btn btn-primary btn-lg">Xem tất cả sản phẩm</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+
